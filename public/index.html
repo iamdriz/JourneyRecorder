@@ -49,6 +49,8 @@
 
             let journeyLine = false;
 
+            let journeyPartMilliseconds = 1000;
+
             const Journey = {}
 
             Journey.journeyParts = [];
@@ -71,7 +73,8 @@
                     } else {
                         journeyLine = L.polyline([[position.coords.latitude, position.coords.longitude]], {
                             color: 'black',
-                            opacity: 1
+                            opacity: 1,
+                            weight: 4,
                         }).addTo(map);
                     }
                 }, function(err) { }, { enableHighAccuracy: true });
@@ -81,14 +84,12 @@
                 Journey.startTime = new Date();
                 $('#startTime').html(Journey.startTime);
                 isRecording = true;
-
-
-                    journeyInterval = setInterval(function(){
-                        if(isPaused) return;
-                            addJourneyPart();
-                            updateTimer();
-                            updateDistance();
-                    }, 1);
+                journeyInterval = setInterval(function(){
+                    if(isPaused) return;
+                        addJourneyPart();
+                        updateTimer();
+                        updateDistance();
+                }, journeyPartMilliseconds);
             }
 
             function updateTimer() {

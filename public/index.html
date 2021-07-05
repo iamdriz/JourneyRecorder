@@ -19,7 +19,7 @@
             journeyPart.lon = position.coords.longitude;
         });
 
-        journeyParts.push(journeyPart);
+        Journey.journeyParts.push(journeyPart);
 
         $('#journeyParts').append("<li><b>" + journeyPart.dateTime + "</b> " + journeyPart.latitude + ", " + journeyPart.longitude + "</li>");
     }

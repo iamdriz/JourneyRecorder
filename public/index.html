@@ -11,17 +11,17 @@
 
     function addJourneyPart() {
 
+        let journeyPart = {};
+        journeyPart.dateTime = new Date();
+
         navigator.geolocation.getCurrentPosition(function(position){
-            journeyPart = {
-                dateTime: new Date(),
-                lat: position.coords.latitude,
-                lon: position.coords.longitude,
-            }
-
-            journeyParts.push(journeyPart);
-
-            $('#journeyParts').append("<li><b>" + journeyPart.dateTime + "</b> " + journeyPart.latitude + ", " + journeyPart.longitude + "</li>")
+            journeyPart.lat = position.coords.latitude;
+            journeyPart.lon = position.coords.longitude;
         });
+
+        journeyParts.push(journeyPart);
+
+        $('#journeyParts').append("<li><b>" + journeyPart.dateTime + "</b> " + journeyPart.latitude + ", " + journeyPart.longitude + "</li>");
     }
 
     function startJourney() {

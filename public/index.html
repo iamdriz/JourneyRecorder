@@ -15,7 +15,7 @@
             Journey.journeyParts = [];
 
             navigator.geolocation.getCurrentPosition(function(position){
-                alert(position);
+                alert(position.coords.latitude);
             });
 
             function addJourneyPart() {

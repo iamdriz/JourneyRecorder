@@ -42,8 +42,10 @@
                 journeyInterval = setInterval(function(){
                     if(isPaused) return;
                         addJourneyPart();
-                        updateTimer();
                 }, 1000);
+                setInterval(function(){
+                    updateTimer();
+                }, 1);
             }
 
             function updateTimer() {

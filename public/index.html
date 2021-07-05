@@ -68,18 +68,29 @@
 
             $(document).on('click', '#stop', function(e) {
                 e.preventDefault();
+                $('#start, #stop, #pause, #continue').hide();
                 stopJourney();
             });
 
             $(document).on('click', '#pause', function(e) {
                 e.preventDefault();
                 pauseJourney();
+                $('#pause').hide();
+                $('#continue').show();
+            });
+
+            $(document).on('click', '#continue', function(e) {
+                e.preventDefault();
+                pauseJourney();
+                $('#pause').show();
+                $('#continue').hide();
             });
 
         </script>
 
         <button id="start">Start</button>
         <button id="pause" style="display: none;">Pause</button>
+        <button id="continue" style="display: none;">Continue</button>
         <button id="stop" style="display: none;">Stop</button>
 
         <div id="timer"></div>

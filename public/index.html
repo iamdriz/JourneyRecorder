@@ -1,80 +1,88 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Test</title>
+    </head>
+    <body>
+        <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript">
 
-<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
-<script type="text/javascript">
+            let journeyInterval = null,
+                isPaused = false;
 
-    let journeyInterval = null,
-        isPaused = false;
+            const Journey = {}
 
-    const Journey = {}
+            Journey.journeyParts = [];
 
-    Journey.journeyParts = [];
+            function addJourneyPart() {
 
-    function addJourneyPart() {
+                let journeyPart = {};
+                journeyPart.dateTime = new Date();
 
-        let journeyPart = {};
-        journeyPart.dateTime = new Date();
+                navigator.geolocation.getCurrentPosition(function(position){
+                    journeyPart.lat = position.coords.latitude;
+                    journeyPart.lon = position.coords.longitude;
+                });
 
-        navigator.geolocation.getCurrentPosition(function(position){
-            journeyPart.lat = position.coords.latitude;
-            journeyPart.lon = position.coords.longitude;
-        });
+                Journey.journeyParts.push(journeyPart);
 
-        Journey.journeyParts.push(journeyPart);
+                $('#journeyParts').append("<li><b>" + journeyPart.dateTime + "</b> " + journeyPart.latitude + ", " + journeyPart.longitude + "</li>");
+            }
 
-        $('#journeyParts').append("<li><b>" + journeyPart.dateTime + "</b> " + journeyPart.latitude + ", " + journeyPart.longitude + "</li>");
-    }
+            function startJourney() {
+                Journey.startTime = new Date();
+                $('#startTime').html(Journey.startTime);
+                isRecording = true;
+                journeyInterval = setInterval(function(){
+                    if(isPaused) return;
+                        addJourneyPart();
+                        updateTimer();
+                }, 1000);
+            }
 
-    function startJourney() {
-        Journey.startTime = new Date();
-        $('#startTime').html(Journey.startTime);
-        isRecording = true;
-        journeyInterval = setInterval(function(){
-            if(isPaused) return;
-                addJourneyPart();
-                updateTimer();
-        }, 1000);
-    }
+            function updateTimer() {
+                let timer = new Date() - Journey.startTime;
 
-    function updateTimer() {
-        
-    }
+            }
 
-    function stopJourney() {
-        clearInterval(journeyInterval);
-        Journey.endTime = new Date();
-        $('#endTime').html(Journey.endTime);
-    }
+            function stopJourney() {
+                clearInterval(journeyInterval);
+                Journey.endTime = new Date();
+                $('#endTime').html(Journey.endTime);
+            }
 
-    function pauseJourney() {
-        isPaused = true;
-    }
+            function pauseJourney() {
+                isPaused = true;
+            }
 
-    $(document).on('click', '#start', function(e) {
-        e.preventDefault();
-        $('#start').hide();
-        $('#stop, #pause').show();
-        startJourney();
-    });
+            $(document).on('click', '#start', function(e) {
+                e.preventDefault();
+                $('#start').hide();
+                $('#stop, #pause').show();
+                startJourney();
+            });
 
-    $(document).on('click', '#stop', function(e) {
-        e.preventDefault();
-        stopJourney();
-    });
+            $(document).on('click', '#stop', function(e) {
+                e.preventDefault();
+                stopJourney();
+            });
 
-    $(document).on('click', '#pause', function(e) {
-        e.preventDefault();
-        pauseJourney();
-    });
+            $(document).on('click', '#pause', function(e) {
+                e.preventDefault();
+                pauseJourney();
+            });
 
-</script>
+        </script>
 
-<button id="start">Start</button>
-<button id="pause" style="display: none;">Pause</button>
-<button id="stop" style="display: none;">Stop</button>
+        <button id="start">Start</button>
+        <button id="pause" style="display: none;">Pause</button>
+        <button id="stop" style="display: none;">Stop</button>
 
-<div id="timer"></div>
+        <div id="timer"></div>
 
-<p>Start Time: <span id="startTime"></span></p>
-<p>End Time: <span id="endTime"></span></p>
+        <p>Start Time: <span id="startTime"></span></p>
+        <p>End Time: <span id="endTime"></span></p>
 
-<ul id="journeyParts"></ul>
+        <ul id="journeyParts"></ul>
+    </body>
+</html>

@@ -77,17 +77,17 @@
                 isRecording = true;
 
                 navigator.geolocation.getCurrentPosition(function(position){
-                    journeyLine = L.polyline([position.coords.latitude, position.coords.longitude], {
+                    journeyLine = L.polyline([[position.coords.latitude, position.coords.longitude]], {
                         color: 'black',
                         opacity: 1
                     }).addTo(map);
 
                     journeyInterval = setInterval(function(){
-                    if(isPaused) return;
-                        addJourneyPart();
-                        updateTimer();
-                        updateDistance();
-                }, 1);
+                        if(isPaused) return;
+                            addJourneyPart();
+                            updateTimer();
+                            updateDistance();
+                    }, 1);
                 }, function(err) { }, { enableHighAccuracy: true });
             }
 

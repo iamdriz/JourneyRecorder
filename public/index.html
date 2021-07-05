@@ -1,5 +1,5 @@
 
-
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
 
     let journeyInterval = null,
@@ -45,10 +45,27 @@
         isRecording = false;
     }
 
+    $(document).on('click', '#start', function(e) {
+        e.preventDefault();
+        $('#start').hide();
+        $('#stop','#pause').show();
+        startJourney();
+    });
+
+    $(document).on('click', '#stop', function(e) {
+        e.preventDefault();
+        stopJourney();
+    });
+
+    $(document).on('click', '#pause', function(e) {
+        e.preventDefault();
+        pauseJourney();
+    });
+
 </script>
 
 <button id="start">Start</button>
-<button id="pause">Pause</button>
-<button id="stop">Stop</button>
+<button id="pause" style="display: none;">Pause</button>
+<button id="stop" style="display: none;">Stop</button>
 
 <div id="timer"></div>

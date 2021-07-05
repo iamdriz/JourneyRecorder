@@ -14,6 +14,10 @@
 
             Journey.journeyParts = [];
 
+            navigator.geolocation.getCurrentPosition(function(position){
+                alert(position);
+            });
+
             function addJourneyPart() {
 
                 let journeyPart = {};

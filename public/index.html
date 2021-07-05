@@ -93,9 +93,9 @@
 
             function updateDistance() {
                 let coords = getLatLng(Journey.journeyParts);
-                let distance = calculateDistance(coords[0].latitude, coords[0].longitude, 
-                coords[coords.length-1].latitude, 
-                coords[coords.length-1].longitude);
+                let distance = calculateDistance(coords[0][0], coords[0][1], 
+                coords[coords.length-1][0], 
+                coords[coords.length-1][1]);
                 $('#distance').html(distance);
             }
 
@@ -111,7 +111,7 @@
                     opacity: 1
                 }).addTo(map);
 
-                map.setView([coords[0].latitude, coords[0].longitude], 16);
+                map.setView([coords[0][0], coords[0][1]], 16);
             }
 
             function pauseJourney() {

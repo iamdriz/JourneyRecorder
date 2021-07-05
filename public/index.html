@@ -57,7 +57,7 @@
 
             navigator.geolocation.getCurrentPosition(function(position){
                 //
-            });
+            }, function(err) { }, { enableHighAccuracy: true });
 
             function addJourneyPart() {
 
@@ -71,7 +71,7 @@
                     Journey.journeyParts.push(journeyPart);
 
                     //$('#journeyParts').append("<li><b>" + journeyPart.dateTime + "</b> " + journeyPart.latitude + ", " + journeyPart.longitude + "</li>");
-                });
+                }, function(err) { }, { enableHighAccuracy: true });
             }
 
             function startJourney() {

@@ -12,7 +12,7 @@
 
         <button id="start">Start</button>
         <button id="pause" style="display: none;">Pause</button>
-        <button id="continue" style="display: none;">Continue</button>
+        <button id="resume" style="display: none;">Resume</button>
         <button id="stop" style="display: none;">Stop</button>
 
         <p>Time: <span id="timer"></span></p>
@@ -44,6 +44,12 @@
                     .setView([53.3871228,-1.4658309], 16)
                     .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
 
+            map.dragging.disable();
+            map.touchZoom.disable();
+            map.doubleClickZoom.disable();
+            map.scrollWheelZoom.disable();
+            map.boxZoom.disable();
+
             let journeyInterval = null,
                 isPaused = false;
 
@@ -71,12 +77,13 @@
                     if(journeyLine) {
                         journeyLine.addLatLng([journeyPart.latitude, journeyPart.longitude])
                     } else {
-                        journeyLine = L.polyline([[position.coords.latitude, position.coords.longitude]], {
+                        journeyLine = L.polyline([[journeyPart.latitude, journeyPart.longitude]], {
                             color: 'black',
                             opacity: 1,
                             weight: 4,
                         }).addTo(map);
                     }
+                    map.setView([journeyPart.latitude, journeyPart.longitude], 16)
                 }, function(err) { }, { enableHighAccuracy: true });
             }
 
@@ -114,7 +121,7 @@
                 Journey.endTime = new Date();
                 $('#endTime').html(Journey.endTime);
 
-                let coords = getLatLng(Journey.journeyParts);
+                //let coords = getLatLng(Journey.journeyParts);
 
                 // L.polyline(coords, {
                 //     color: 'black',
@@ -123,14 +130,14 @@
                 //     weight: 4
                 // }).addTo(map);
 
-                map.setView([coords[0][0], coords[0][1]], 16);
+                //map.setView([coords[0][0], coords[0][1]], 16);
             }
 
             function pauseJourney() {
                 isPaused = true;
             }
 
-            function continueJourney() {
+            function resumeJourney() {
                 isPaused = false;
             }
 
@@ -143,7 +150,7 @@
 
             $(document).on('click', '#stop', function(e) {
                 e.preventDefault();
-                $('#start, #stop, #pause, #continue').hide();
+                $('#start, #stop, #pause, #resume').hide();
                 stopJourney();
             });
 
@@ -151,14 +158,14 @@
                 e.preventDefault();
                 pauseJourney();
                 $('#pause').hide();
-                $('#continue').show();
+                $('#resume').show();
             });
 
-            $(document).on('click', '#continue', function(e) {
+            $(document).on('click', '#resume', function(e) {
                 e.preventDefault();
-                continueJourney();
+                resumeJourney();
                 $('#pause').show();
-                $('#continue').hide();
+                $('#resume').hide();
             });
 
             function getLatLng(t) {

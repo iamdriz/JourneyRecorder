@@ -3,7 +3,7 @@
 <script type="text/javascript">
 
     let journeyInterval = null,
-        isRecording = false;
+        isPaused = false;
 
     const Journey = {}
 
@@ -29,7 +29,7 @@
         $('#startTime').html(Journey.startTime);
         isRecording = true;
         journeyInterval = setInterval(function(){
-            if(!isRecording) return;
+            if(isPaused) return;
                 addJourneyPart();
                 updateTimer();
         }, 1000);
@@ -46,7 +46,7 @@
     }
 
     function pauseJourney() {
-        isRecording = false;
+        isPaused = true;
     }
 
     $(document).on('click', '#start', function(e) {

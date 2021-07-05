@@ -15,7 +15,7 @@
             Journey.journeyParts = [];
 
             navigator.geolocation.getCurrentPosition(function(position){
-                alert(position.coords.latitude);
+                //
             });
 
             function addJourneyPart() {
@@ -26,11 +26,11 @@
                 navigator.geolocation.getCurrentPosition(function(position){
                     journeyPart.latitude = position.coords.latitude;
                     journeyPart.longitude = position.coords.longitude;
+
+                    Journey.journeyParts.push(journeyPart);
+
+                    $('#journeyParts').append("<li><b>" + journeyPart.dateTime + "</b> " + journeyPart.latitude + ", " + journeyPart.longitude + "</li>");
                 });
-
-                Journey.journeyParts.push(journeyPart);
-
-                $('#journeyParts').append("<li><b>" + journeyPart.dateTime + "</b> " + journeyPart.latitude + ", " + journeyPart.longitude + "</li>");
             }
 
             function startJourney() {
@@ -59,6 +59,10 @@
                 isPaused = true;
             }
 
+            function continueJourney() {
+                isPaused = false;
+            }
+
             $(document).on('click', '#start', function(e) {
                 e.preventDefault();
                 $('#start').hide();
@@ -81,7 +85,7 @@
 
             $(document).on('click', '#continue', function(e) {
                 e.preventDefault();
-                pauseJourney();
+                continueJourney();
                 $('#pause').show();
                 $('#continue').hide();
             });

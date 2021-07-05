@@ -78,6 +78,7 @@
                     if(isPaused) return;
                         addJourneyPart();
                         updateTimer();
+                        updateDistance();
                 }, 1);
             }
 
@@ -90,15 +91,27 @@
                 $('#timer').html([diff.hours(), diff.minutes(), diff.seconds(), diff.milliseconds()].join(':'))
             }
 
+            function updateDistance() {
+                let coords = getLatLng(Journey.journeyParts);
+                let distance = calculateDistance(coords[0].latitude, coords[0].longitude, 
+                coords[coords.length-1].latitude, 
+                coords[coords.length-1].longitude);
+                $('#distance').html(distance);
+            }
+
             function stopJourney() {
                 clearInterval(journeyInterval);
                 Journey.endTime = new Date();
                 $('#endTime').html(Journey.endTime);
 
-                L.polyline(getLatLng(Journey.journeyParts), {
+                let coords = getLatLng(Journey.journeyParts);
+
+                L.polyline(coords, {
                     color: 'black',
                     opacity: 1
                 }).addTo(map);
+
+                map.setView([coords[0].latitude, coords[0].longitude], 16);
             }
 
             function pauseJourney() {

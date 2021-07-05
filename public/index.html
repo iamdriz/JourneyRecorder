@@ -1,0 +1,54 @@
+
+
+<script type="text/javascript">
+
+    let journeyInterval = null,
+        isRecording = false;
+
+    const Journey = {}
+
+    Journey.journeyParts = [];
+
+    function addJourneyPart() {
+
+        navigator.geolocation.getCurrentPosition(function(position){
+            journeyPart = {
+                dateTime: new Date(),
+                lat: position.coords.latitude,
+                lon: position.coords.longitude,
+            }
+
+            journeyParts.push(journeyPart);
+        });
+    }
+
+    function startJourney() {
+        Journey.startDateTime = new Date();
+        isRecording = true;
+        journeyInterval = setInterval(function(){
+            if(!isRecording) return;
+                addJourneyPart();
+                updateTimer();
+        }, 1000);
+    }
+
+    function updateTimer() {
+        
+    }
+
+    function stopJourney() {
+        clearInterval(journeyInterval);
+        Journey.endTime = new Date();
+    }
+
+    function pauseJourney() {
+        isRecording = false;
+    }
+
+</script>
+
+<button id="start">Start</button>
+<button id="pause">Pause</button>
+<button id="stop">Stop</button>
+
+<div id="timer"></div>

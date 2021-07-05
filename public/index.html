@@ -24,8 +24,8 @@
                 journeyPart.dateTime = new Date();
 
                 navigator.geolocation.getCurrentPosition(function(position){
-                    journeyPart.lat = position.coords.latitude;
-                    journeyPart.lon = position.coords.longitude;
+                    journeyPart.latitude = position.coords.latitude;
+                    journeyPart.longitude = position.coords.longitude;
                 });
 
                 Journey.journeyParts.push(journeyPart);

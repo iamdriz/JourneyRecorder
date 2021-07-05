@@ -7,7 +7,27 @@
         <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.3.2/moment-duration-format.min.js"></script>
+        <script src='//api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
+        <link href='//api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' property='stylesheet'/>
         <script type="text/javascript">
+
+            L.mapbox.accessToken = "pk.eyJ1IjoidGhlZmxvb3ciLCJhIjoiaGFWLVhLRSJ9.X1fJCnMuqwE9wzFiitHiUw";
+
+            let map = L.mapbox.map("map", null, {
+                        worldCopyJump: !0,
+                        maxBounds: [
+                            [-90, -180],
+                            [90, 180]
+                        ],
+                        tileLayer: {
+                            continuousWorld: !1,
+                            noWrap: !0
+                        },
+                        zoomControl: false,
+                        attributionControl: false
+                    })
+                    .setView([38.20365531807149, -97.6025390625], 5)
+                    .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
 
             let journeyInterval = null,
                 isPaused = false;
@@ -50,7 +70,7 @@
                 let endTime = new Date();
                 let startTime = Journey.startTime;
                 // using the main startTime means pause will jump!
-                //Journey.journeyParts[Journey.journeyParts.length-1].dateTime
+                // Journey.journeyParts[Journey.journeyParts.length-1].dateTime
                 let diff = moment.duration(moment(endTime).diff(starTime));
                 $('#timer').html([diff.hours(), diff.minutes(), diff.seconds(), diff.milliseconds()].join(':'))
             }
@@ -59,6 +79,11 @@
                 clearInterval(journeyInterval);
                 Journey.endTime = new Date();
                 $('#endTime').html(Journey.endTime);
+
+                L.polyline(getLatLng(Journey.journeyParts), {
+                    color: 'black',
+                    opacity: 1
+                }).addTo(map);
             }
 
             function pauseJourney() {
@@ -96,6 +121,11 @@
                 $('#continue').hide();
             });
 
+            function getLatLng(t) {
+                for (var e = [], n = 0; n < t.length; n++) e.push([t[n].latitude, t[n].longitude]);
+                return e;
+            }
+
         </script>
 
         <button id="start">Start</button>
@@ -109,5 +139,7 @@
         <p>End Time: <span id="endTime"></span></p>
 
         <ul id="journeyParts"></ul>
+
+        <div id="map" style="width:100%;height:640px;"></div>
     </body>
 </html>

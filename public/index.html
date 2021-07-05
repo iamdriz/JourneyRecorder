@@ -67,7 +67,7 @@
                     journeyPart.latitude = position.coords.latitude;
                     journeyPart.longitude = position.coords.longitude;
                     Journey.journeyParts.push(journeyPart);
-                    updateMap(journeyPart);
+                    updateMap(journeyPart.latitude, journeyPart.longitude);
                 }, function(err) { }, { enableHighAccuracy: true });
             }
 
@@ -83,20 +83,17 @@
                 }, 1);
             }
 
-            function updateMap() {
-                let coords = getLatLng(journeyPart);
+            function updateMap(latitude, longitude) {
                 if(journeyLine) {
-                    journeyLine.addLatLng(coords)
+                    journeyLine.addLatLng([latitude, longitude])
                 } else {
-                    journeyLine = L.polyline(coords, {
+                    journeyLine = L.polyline([latitude, longitude], {
                         color: 'black',
                         opacity: 1,
                         noClip: true,
                         weight: 4
                     }).addTo(map);
                 }
-
-                map.setView(coords, 16);
             }
 
             function updateTimer() {
@@ -121,7 +118,7 @@
                 Journey.endTime = new Date();
                 $('#endTime').html(Journey.endTime);
 
-                // let coords = getLatLng(Journey.journeyParts);
+                let coords = getLatLng(Journey.journeyParts);
 
                 // L.polyline(coords, {
                 //     color: 'black',
@@ -130,7 +127,7 @@
                 //     weight: 4
                 // }).addTo(map);
 
-                //map.setView([coords[0][0], coords[0][1]], 16);
+                map.setView([coords[0][0], coords[0][1]], 16);
             }
 
             function pauseJourney() {

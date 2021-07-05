@@ -67,7 +67,7 @@
                     journeyPart.latitude = position.coords.latitude;
                     journeyPart.longitude = position.coords.longitude;
                     Journey.journeyParts.push(journeyPart);
-                    updateMap(journeyPart.latitude, journeyPart.longitude);
+                    journeyLine.addLatLng([journeyPart.latitude, journeyPart.longitude])
                 }, function(err) { }, { enableHighAccuracy: true });
             }
 
@@ -75,25 +75,20 @@
                 Journey.startTime = new Date();
                 $('#startTime').html(Journey.startTime);
                 isRecording = true;
-                journeyInterval = setInterval(function(){
+
+                navigator.geolocation.getCurrentPosition(function(position){
+                    journeyLine = L.polyline([position.coords.latitude, position.coords.longitude], {
+                        color: 'black',
+                        opacity: 1
+                    }).addTo(map);
+
+                    journeyInterval = setInterval(function(){
                     if(isPaused) return;
                         addJourneyPart();
                         updateTimer();
                         updateDistance();
                 }, 1);
-            }
-
-            function updateMap(latitude, longitude) {
-                if(journeyLine) {
-                    journeyLine.addLatLng([latitude, longitude])
-                } else {
-                    journeyLine = L.polyline([latitude, longitude], {
-                        color: 'black',
-                        opacity: 1,
-                        //noClip: true,
-                        weight: 4
-                    }).addTo(map);
-                }
+                }, function(err) { }, { enableHighAccuracy: true });
             }
 
             function updateTimer() {

@@ -47,12 +47,15 @@
             let journeyInterval = null,
                 isPaused = false;
 
+            let journeyLine = null;
+
             const Journey = {}
 
             Journey.journeyParts = [];
 
             navigator.geolocation.getCurrentPosition(function(position){
-                //
+                
+
             }, function(err) { }, { enableHighAccuracy: true });
 
             function addJourneyPart() {
@@ -63,10 +66,8 @@
                 navigator.geolocation.getCurrentPosition(function(position){
                     journeyPart.latitude = position.coords.latitude;
                     journeyPart.longitude = position.coords.longitude;
-
                     Journey.journeyParts.push(journeyPart);
-
-                    //$('#journeyParts').append("<li><b>" + journeyPart.dateTime + "</b> " + journeyPart.latitude + ", " + journeyPart.longitude + "</li>");
+                    updateMap(journeyPart);
                 }, function(err) { }, { enableHighAccuracy: true });
             }
 
@@ -80,6 +81,22 @@
                         updateTimer();
                         updateDistance();
                 }, 1);
+            }
+
+            function updateMap() {
+                let coords = getLatLng(journeyPart);
+                if(journeyLine) {
+                    journeyLine.addLatLng(coords)
+                } else {
+                    journeyLine = L.polyline(coords, {
+                        color: 'black',
+                        opacity: 1,
+                        noClip: true,
+                        weight: 4
+                    }).addTo(map);
+                }
+
+                map.setView(coords, 16);
             }
 
             function updateTimer() {
@@ -104,14 +121,16 @@
                 Journey.endTime = new Date();
                 $('#endTime').html(Journey.endTime);
 
-                let coords = getLatLng(Journey.journeyParts);
+                // let coords = getLatLng(Journey.journeyParts);
 
-                L.polyline(coords, {
-                    color: 'black',
-                    opacity: 1
-                }).addTo(map);
+                // L.polyline(coords, {
+                //     color: 'black',
+                //     opacity: 1,
+                //     noClip: true,
+                //     weight: 4
+                // }).addTo(map);
 
-                map.setView([coords[0][0], coords[0][1]], 16);
+                //map.setView([coords[0][0], coords[0][1]], 16);
             }
 
             function pauseJourney() {
@@ -164,8 +183,9 @@
                 var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
                 var d = R * c;
                 return d;
-                }
-                Number.prototype.toRad = function() {
+            }
+
+            Number.prototype.toRad = function() {
                 return this * Math.PI / 180;
             }
 

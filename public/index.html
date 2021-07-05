@@ -9,6 +9,25 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.3.2/moment-duration-format.min.js"></script>
         <script src='//api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
         <link href='//api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' property='stylesheet'/>
+
+
+
+        <button id="start">Start</button>
+        <button id="pause" style="display: none;">Pause</button>
+        <button id="continue" style="display: none;">Continue</button>
+        <button id="stop" style="display: none;">Stop</button>
+
+        <div id="timer"></div>
+
+        <p>Start Time: <span id="startTime"></span></p>
+        <p>End Time: <span id="endTime"></span></p>
+
+        <ul id="journeyParts"></ul>
+
+        <div id="map" style="width:100%;height:640px;"></div>
+
+
+
         <script type="text/javascript">
 
             L.mapbox.accessToken = "pk.eyJ1IjoidGhlZmxvb3ciLCJhIjoiaGFWLVhLRSJ9.X1fJCnMuqwE9wzFiitHiUw";
@@ -127,19 +146,5 @@
             }
 
         </script>
-
-        <button id="start">Start</button>
-        <button id="pause" style="display: none;">Pause</button>
-        <button id="continue" style="display: none;">Continue</button>
-        <button id="stop" style="display: none;">Stop</button>
-
-        <div id="timer"></div>
-
-        <p>Start Time: <span id="startTime"></span></p>
-        <p>End Time: <span id="endTime"></span></p>
-
-        <ul id="journeyParts"></ul>
-
-        <div id="map" style="width:100%;height:640px;"></div>
     </body>
 </html>

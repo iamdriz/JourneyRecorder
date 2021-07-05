@@ -47,7 +47,7 @@
             let journeyInterval = null,
                 isPaused = false;
 
-            let journeyLine = null;
+            let journeyLine = false;
 
             const Journey = {}
 
@@ -90,7 +90,7 @@
                     journeyLine = L.polyline([latitude, longitude], {
                         color: 'black',
                         opacity: 1,
-                        noClip: true,
+                        //noClip: true,
                         weight: 4
                     }).addTo(map);
                 }

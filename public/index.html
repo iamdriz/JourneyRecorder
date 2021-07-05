@@ -48,7 +48,10 @@
 
             function updateTimer() {
                 let endTime = new Date();
-                let diff = moment.duration(moment(endTime).diff(Journey.journeyParts[Journey.journeyParts.length-1].dateTime));
+                let startTime = Journey.startTime;
+                // using the main startTime means pause will jump!
+                //Journey.journeyParts[Journey.journeyParts.length-1].dateTime
+                let diff = moment.duration(moment(endTime).diff(starTime));
                 $('#timer').html([diff.hours(), diff.minutes(), diff.seconds(), diff.milliseconds()].join(':'))
             }
 

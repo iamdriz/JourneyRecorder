@@ -49,6 +49,7 @@
             function updateTimer() {
                 let endTime = new Date();
                 let diff = moment.duration(moment(endTime).diff(Journey.startTime));
+                console.log(diff);
                 $('#timer').html([diff.hours(), diff.minutes(), diff.seconds(), diff.milliseconds()].join(':'))
             }
 

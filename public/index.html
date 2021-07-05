@@ -19,11 +19,14 @@
             }
 
             journeyParts.push(journeyPart);
+
+            $('#journeyParts').append("<li><b>" + journeyPart.dateTime + "</b> " + journeyPart.latitude + ", " + journeyPart.longitude + "</li>")
         });
     }
 
     function startJourney() {
-        Journey.startDateTime = new Date();
+        Journey.startTime = new Date();
+        $('#startTime').html(Journey.startTime);
         isRecording = true;
         journeyInterval = setInterval(function(){
             if(!isRecording) return;
@@ -39,6 +42,7 @@
     function stopJourney() {
         clearInterval(journeyInterval);
         Journey.endTime = new Date();
+        $('#endTime').html(Journey.endTime);
     }
 
     function pauseJourney() {
@@ -69,3 +73,8 @@
 <button id="stop" style="display: none;">Stop</button>
 
 <div id="timer"></div>
+
+<p>Start Time: <span id="startTime"></span></p>
+<p>End Time: <span id="endTime"></span></p>
+
+<ul id="journeyParts"></ul>

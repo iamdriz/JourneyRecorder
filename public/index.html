@@ -71,7 +71,7 @@
             function addJourneyPart() {
 
                 let journeyPart = {};
-                journeyPart.dateTime = Journey.currentTime = new Date();
+                journeyPart.dateTime = new Date();
 
                 navigator.geolocation.getCurrentPosition(function(position){
                     journeyPart.latitude = position.coords.latitude;
@@ -99,7 +99,7 @@
             }
 
             function startJourney() {
-                Journey.startTime = Journey.currentTime = new Date();
+                Journey.startTime = new Date();
                 $('#startTime').html(Journey.startTime);
                 journeyInterval = setInterval(function(){
                     if(isPaused) return;
@@ -110,7 +110,9 @@
 
             function updateTimer() {
                 let startTime = Journey.startTime;
-                let endTime = Journey.currentTime;
+                // this means that pause will jump when resumed
+                // however we need this to be the case as points are NOW not in the past... :/
+                let endTime = new Date();
                 let diff = moment.duration(moment(endTime).diff(startTime));
                 $('#timer').html([diff.hours(), diff.minutes(), diff.seconds(), diff.milliseconds()].join(':'));
             }
@@ -132,7 +134,6 @@
 
             function pauseJourney() {
                 isPaused = true;
-                Journey.currentTime = new Date();
             }
 
             function resumeJourney() {

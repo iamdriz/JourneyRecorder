@@ -55,7 +55,7 @@
 
             let journeyLine = false;
 
-            let journeyPartMilliseconds = 1000;
+            let journeyPartMilliseconds = 1;
 
             const Journey = {}
 
@@ -121,17 +121,6 @@
                 clearInterval(journeyInterval);
                 Journey.endTime = new Date();
                 $('#endTime').html(Journey.endTime);
-
-                //let coords = getLatLng(Journey.journeyParts);
-
-                // L.polyline(coords, {
-                //     color: 'black',
-                //     opacity: 1,
-                //     noClip: true,
-                //     weight: 4
-                // }).addTo(map);
-
-                //map.setView([coords[0][0], coords[0][1]], 16);
             }
 
             function pauseJourney() {

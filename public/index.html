@@ -52,11 +52,12 @@
             map.boxZoom.disable();
 
             let journeyInterval = null,
-                isPaused = false;
+                isPaused = false,
+                pausedDateTime = false;
 
             let journeyLine = false;
 
-            let journeyPartMilliseconds = 100;
+            let journeyPartMilliseconds = 1000;
 
             const Journey = {}
 
@@ -91,34 +92,30 @@
                     // update distance AFTER we get a part
                     updateDistance();
 
-                    recordJourneyPoint();
-
                 }, function(err) { }, { enableHighAccuracy: false });
             }
 
             function recordJourneyPoint() {
-                journeyInterval = setTimeout(function(){
+                
+            }
+
+            function startJourney() {
+                Journey.startTime = new Date();
+                $('#startTime').html(Journey.startTime);
+                journeyInterval = setInterval(function(){
                     if(isPaused) return;
                         addJourneyPart();
                         updateTimer();
                 }, journeyPartMilliseconds);
             }
 
-            function startJourney() {
-                Journey.startTime = new Date();
-                $('#startTime').html(Journey.startTime);
-                recordJourneyPoint();
-            }
-
             function updateTimer() {
-                let endTime = new Date();
-                let startTime;
-                if(Journey.journeyParts.length > 0) {
-                    startTime = Journey.journeyParts[Journey.journeyParts.length-1].dateTime;
-                    $('#journeyParts').append('<li>' + startTime + '</li>')
+                if(pausedDateTime) {
+                    let endTime = pausedDateTime;
                 } else {
-                    startTime = Journey.startTime;
+                    let endTime = new Date();
                 }
+                let startTime = Journey.startTime;
                 let diff = moment.duration(moment(endTime).diff(startTime));
                 $('#timer').html([diff.hours(), diff.minutes(), diff.seconds(), diff.milliseconds()].join(':'))
             }
@@ -140,10 +137,12 @@
 
             function pauseJourney() {
                 isPaused = true;
+                pausedDateTime = new Date();
             }
 
             function resumeJourney() {
                 isPaused = false;
+                pausedDateTime = false;
             }
 
             $(document).on('click', '#start', function(e) {

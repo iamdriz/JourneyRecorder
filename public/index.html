@@ -110,6 +110,7 @@
                 let startTime;
                 if(Journey.journeyParts.length > 0) {
                     startTime = Journey.journeyParts[Journey.journeyParts.length-1].dateTime;
+                    $('#journeyParts').append('<li>' + startTime + '</li>')
                 } else {
                     startTime = Journey.startTime;
                 }

@@ -111,11 +111,11 @@
 
             function updateTimer() {
                 if(pausedDateTime) {
-                    let endTime = pausedDateTime;
+                    let startTime = Journey.startTime - pausedDateTime;
                 } else {
-                    let endTime = new Date();
+                    let startTime = Journey.startTime;
                 }
-                let startTime = Journey.startTime;
+                let endTime = new Date();
                 let diff = moment.duration(moment(endTime).diff(startTime));
                 $('#timer').html([diff.hours(), diff.minutes(), diff.seconds(), diff.milliseconds()].join(':'))
             }

@@ -71,7 +71,7 @@
             function addJourneyPart() {
 
                 let journeyPart = {};
-                journeyPart.dateTime = new Date();
+                journeyPart.dateTime = Journey.currentTime = new Date();
 
                 navigator.geolocation.getCurrentPosition(function(position){
                     journeyPart.latitude = position.coords.latitude;

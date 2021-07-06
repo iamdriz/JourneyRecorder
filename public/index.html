@@ -108,8 +108,7 @@
                 // using the main startTime means pause will jump!
                 // Journey.journeyParts[Journey.journeyParts.length-1].dateTime
                 let diff = moment.duration(moment(endTime).diff(startTime));
-                // , diff.milliseconds()
-                $('#timer').html([diff.hours(), diff.minutes(), diff.seconds()].join(':'))
+                $('#timer').html([diff.hours(), diff.minutes(), diff.seconds(), diff.milliseconds()].join(':'))
             }
 
             function updateDistance() {

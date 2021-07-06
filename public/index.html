@@ -52,8 +52,7 @@
             map.boxZoom.disable();
 
             let journeyInterval = null,
-                isPaused = false,
-                pausedDateTime = false;
+                isPaused = false
 
             let journeyLine = false;
 
@@ -100,7 +99,7 @@
             }
 
             function startJourney() {
-                Journey.startTime = new Date();
+                Journey.startTime = Journey.currentTime = new Date();
                 $('#startTime').html(Journey.startTime);
                 journeyInterval = setInterval(function(){
                     if(isPaused) return;
@@ -110,14 +109,10 @@
             }
 
             function updateTimer() {
-                if(pausedDateTime) {
-                    let startTime = Journey.startTime - pausedDateTime;
-                } else {
-                    let startTime = Journey.startTime;
-                }
-                let endTime = new Date();
+                let startTime = Journey.startTime;
+                let endTime = Journey.currentTime;
                 let diff = moment.duration(moment(endTime).diff(startTime));
-                $('#timer').html([diff.hours(), diff.minutes(), diff.seconds(), diff.milliseconds()].join(':'))
+                $('#timer').html([diff.hours(), diff.minutes(), diff.seconds(), diff.milliseconds()].join(':'));
             }
 
             function updateDistance() {
@@ -137,12 +132,11 @@
 
             function pauseJourney() {
                 isPaused = true;
-                pausedDateTime = new Date();
+                Journey.currentTime = new Date();
             }
 
             function resumeJourney() {
                 isPaused = false;
-                pausedDateTime = false;
             }
 
             $(document).on('click', '#start', function(e) {

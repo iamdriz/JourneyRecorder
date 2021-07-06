@@ -106,7 +106,9 @@
                 let endTime = new Date();
                 let startTime;
                 if(Journey.journeyParts.length > 0) {
+                    console.log('JourneyPart', Journey.journeyParts[Journey.journeyParts.length-1]);
                     startTime = Journey.journeyParts[Journey.journeyParts.length-1].dateTime;
+                    console.log('startTime', startTime);
                 } else {
                     startTime = Journey.startTime;
                 }

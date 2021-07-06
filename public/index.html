@@ -91,18 +91,23 @@
                     // update distance AFTER we get a part
                     updateDistance();
 
+                    recordJourneyPoint();
+
                 }, function(err) { }, { enableHighAccuracy: false });
+            }
+
+            function recordJourneyPoint() {
+                journeyInterval = setTimeout(function(){
+                    if(isPaused) return;
+                        addJourneyPart();
+                        updateTimer();
+                }, journeyPartMilliseconds);
             }
 
             function startJourney() {
                 Journey.startTime = new Date();
                 $('#startTime').html(Journey.startTime);
-                isRecording = true;
-                journeyInterval = setInterval(function(){
-                    if(isPaused) return;
-                        addJourneyPart();
-                        updateTimer();
-                }, journeyPartMilliseconds);
+                recordJourneyPoint();
             }
 
             function updateTimer() {

@@ -67,7 +67,7 @@
 
             navigator.geolocation.getCurrentPosition(function(position){
                 
-            }, function(err) { }, { enableHighAccuracy: false });
+            }, function(err) { }, { enableHighAccuracy: true });
 
             function addJourneyPart() {
 
@@ -92,7 +92,7 @@
                     // update distance AFTER we get a part
                     updateDistance();
 
-                }, function(err) { }, { enableHighAccuracy: false });
+                }, function(err) { }, { enableHighAccuracy: true });
             }
 
             function recordJourneyPoint() {

@@ -86,7 +86,11 @@
                             weight: 4,
                         }).addTo(map);
                     }
-                    map.setView([journeyPart.latitude, journeyPart.longitude], 16)
+                    map.setView([journeyPart.latitude, journeyPart.longitude], 16);
+
+                    // MUST HAPPEN HERE
+                    updateTimer();
+                    updateDistance();
                 }, function(err) { }, { enableHighAccuracy: false });
             }
 
@@ -97,15 +101,12 @@
                 journeyInterval = setInterval(function(){
                     if(isPaused) return;
                         addJourneyPart();
-                        updateTimer();
-                        updateDistance();
                 }, journeyPartMilliseconds);
             }
 
             function updateTimer() {
                 let endTime = new Date();
                 let startTime;
-                console.log('JourneyPart', Journey.journeyParts[Journey.journeyParts.length-1]);
                 if(Journey.journeyParts.length > 0) {
                     startTime = Journey.journeyParts[Journey.journeyParts.length-1].dateTime;
                 } else {

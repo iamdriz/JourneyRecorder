@@ -88,9 +88,9 @@
                     }
                     map.setView([journeyPart.latitude, journeyPart.longitude], 16);
 
-                    // MUST HAPPEN HERE
-                    updateTimer();
+                    // update distance AFTER we get a part
                     updateDistance();
+
                 }, function(err) { }, { enableHighAccuracy: false });
             }
 
@@ -101,6 +101,7 @@
                 journeyInterval = setInterval(function(){
                     if(isPaused) return;
                         addJourneyPart();
+                        updateTimer();
                 }, journeyPartMilliseconds);
             }
 

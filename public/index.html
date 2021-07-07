@@ -52,7 +52,6 @@
             map.boxZoom.disable();
 
             let journeyInterval = null,
-                journeyInterval2 = null,
                 isPaused = false
 
             let journeyLine = false;
@@ -74,7 +73,7 @@
                 journeyPart.dateTime = new Date();
 
                 Journey.totalMilliseconds += 1;
-                $('#timer').text(moment("2015-01-01").startOf('day')
+                $('#timer').text(moment().startOf('day')
                 .milliseconds(Journey.totalMilliseconds).format('HH:mm:ss:SS'));
 
                 navigator.geolocation.getCurrentPosition(function(position){

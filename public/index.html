@@ -52,11 +52,10 @@
             map.boxZoom.disable();
 
             let journeyInterval = null,
+                journeyInterval2 = null,
                 isPaused = false
 
             let journeyLine = false;
-
-            let journeyPartMilliseconds = 1;
 
             const Journey = {}
 
@@ -104,8 +103,11 @@
                 journeyInterval = setInterval(function(){
                     if(isPaused) return;
                         addJourneyPart();
+                }, 1000);
+                journeyInterval2 = setInterval(function(){
+                    if(isPaused) return;
                         updateTimer();
-                }, journeyPartMilliseconds);
+                }, 1);
             }
 
             function updateTimer() {
@@ -128,6 +130,7 @@
 
             function stopJourney() {
                 clearInterval(journeyInterval);
+                clearInterval(journeyInterval2);
                 Journey.endTime = new Date();
                 $('#endTime').html(Journey.endTime);
             }

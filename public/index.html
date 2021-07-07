@@ -62,7 +62,7 @@
             Journey.journeyParts = [];
 
             Journey.distance = 0;
-            Journey.totalSeconds = 0;
+            Journey.totalMilliseconds = 0;
 
             navigator.geolocation.getCurrentPosition(function(position){
                 
@@ -72,6 +72,10 @@
 
                 let journeyPart = {};
                 journeyPart.dateTime = new Date();
+
+                Journey.totalMilliseconds += 1;
+                $('#timer').text(moment("2015-01-01").startOf('day')
+                .milliseconds(Journey.totalMilliseconds).format('HH:mm:ss:SS'));
 
                 navigator.geolocation.getCurrentPosition(function(position){
                     journeyPart.latitude = position.coords.latitude;
@@ -112,28 +116,7 @@
                 journeyInterval = setInterval(function(){
                     if(isPaused) return;
                         addJourneyPart();
-                        updateTimer();
                 }, 1);
-            }
-
-            function updateTimer() {
-                let startTime = Journey.startTime;
-                // this means that pause will jump when resumed
-                let endTime = new Date();
-                let diff = moment.duration(moment(endTime).diff(startTime));
-                $('#timer').html([diff.hours(), diff.minutes(), diff.seconds(), diff.milliseconds()].join(':'));
-
-                // alternate
-                // let tStartTime;
-                // if(Journey.journeyParts.length > 0) {
-                //     tStartTime = Journey.journeyParts[Journey.journeyParts.length-1].dateTime;
-                // } else {
-                //     tStartTime = Journey.startTime;
-                // }
-                // let timeBetween = (new Date() - tStartTime) / 1000;
-                // Journey.totalSeconds += timeBetween;
-                // $('#timer').text('Timebetween: ' + timeBetween);
-                // //$('#timer').text(moment("2015-01-01").startOf('day').seconds(Journey.totalSeconds).format('HH:mm:ss:SS'));
             }
 
             function updateDistance() {

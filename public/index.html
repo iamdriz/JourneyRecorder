@@ -21,9 +21,9 @@
         <p>End Time: <span id="endTime"></span></p>
         <p>Distance <span id="distance"></span> km</p>
 
-        <ul id="journeyParts"></ul>
+        <div id="map" style="width:100%;height:320px;border:#000 2px solid;"></div>
 
-        <div id="map" style="width:100%;height:480px;border:#000 2px solid;"></div>
+        <ul id="journeyParts"></ul>
 
         <script type="text/javascript">
 
@@ -75,6 +75,12 @@
                 navigator.geolocation.getCurrentPosition(function(position){
                     journeyPart.latitude = position.coords.latitude;
                     journeyPart.longitude = position.coords.longitude;
+                    journeyPart.accuracy = position.coords.accuracy;
+                    journeyPart.altitude = position.coords.altitude;
+                    journeyPart.altitudeAccuracy = position.coords.altitudeAccuracy;
+                    journeyPart.heading = position.coords.heading;
+                    journeyPart.speed = position.coords.speed;
+                    journeyPart.timestamp = position.timestamp;
                     Journey.journeyParts.push(journeyPart);
                     if(journeyLine) {
                         journeyLine.addLatLng([journeyPart.latitude, journeyPart.longitude])
@@ -86,6 +92,8 @@
                         }).addTo(map);
                     }
                     map.setView([journeyPart.latitude, journeyPart.longitude], 16);
+
+                    $('#journeyParts').append('<li>' + JSON.stringify(journeyPart) + '</li>');
 
                     // update distance AFTER we get a part
                     updateDistance();

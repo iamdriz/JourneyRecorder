@@ -133,7 +133,7 @@
                 }
                 let timeBetween = Math.abs(Math.round((new Date() - tStartTime) / 1000));
                 Journey.totalSeconds += timeBetween;
-                $('#timer').text(Journey.totalSeconds);
+                $('#timer').text('Timebetween: ' + timeBetween);
                 //$('#timer').text(moment("2015-01-01").startOf('day').seconds(Journey.totalSeconds).format('HH:mm:ss:SS'));
             }
 

@@ -136,8 +136,8 @@
                 }
                 let endTime = new Date();
                 let timeBetween = (endTime - startTime) / 1000;
-                Journey.totalSeconds= Journey.totalSeconds + timeBetween;
-                $('#timer').html(moment("2015-01-01").startOf('day').seconds(Journey.totalTime).format('HH:mm:ss:SS'));
+                Journey.totalSeconds = Journey.totalSeconds + timeBetween;
+                $('#timer').html(moment("2015-01-01").startOf('day').seconds(Journey.totalSeconds).format('HH:mm:ss:SS'));
             }
 
             function updateDistance() {

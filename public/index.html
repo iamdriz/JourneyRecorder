@@ -112,11 +112,8 @@
                 journeyInterval = setInterval(function(){
                     if(isPaused) return;
                         addJourneyPart();
-                }, 1000);
-                journeyInterval2 = setInterval(function(){
-                    if(isPaused) return;
                         updateTimer();
-                }, 1);
+                }, 1000);
             }
 
             function updateTimer() {
@@ -128,13 +125,14 @@
                 // $('#timer').html([diff.hours(), diff.minutes(), diff.seconds(), diff.milliseconds()].join(':'));
 
                 // alternate
+                let tStartTime;
                 if(Journey.journeyParts.length > 0) {
-                   let tstartTime = Journey.journeyParts[Journey.journeyParts.length-1].dateTime;
+                    tStartTime = Journey.journeyParts[Journey.journeyParts.length-1].dateTime;
                 } else {
-                    let tstartTime = Journey.startTime;
+                    tStartTime = Journey.startTime;
                 }
-                let timeBetween = (new Date() - tstartTime) / 1000;
-                Journey.totalSeconds = Journey.totalSeconds + timeBetween;
+                let timeBetween = Math.abs(Math.round((new Date() - tStartTime) / 1000));
+                Journey.totalSeconds = timeBetween;
                 $('#timer').text(moment("2015-01-01").startOf('day').seconds(Journey.totalSeconds).format('HH:mm:ss:SS'));
             }
 
@@ -210,6 +208,41 @@
                 return this * Math.PI / 180;
             }
 
+
+            function diff_hours(dt2, dt1) 
+            {
+
+            var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+            diff /= (60 * 60);
+            return Math.abs(Math.round(diff));
+
+            }
+
+
+            function diff_minutes(dt2, dt1) 
+            {
+
+            var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+            diff /= (60);
+            return Math.abs(Math.round(diff));
+
+            }
+
+            function diff_seconds(dt2, dt1) 
+            {
+
+            var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+            return Math.abs(Math.round(diff));
+
+            }
+
+            function diff_miliseconds(dt2, dt1) 
+            {
+
+            var diff =(dt2.getTime() - dt1.getTime());
+            return Math.abs(Math.round(diff));
+
+            }
         </script>
     </body>
 </html>

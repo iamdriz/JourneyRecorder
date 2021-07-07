@@ -108,7 +108,7 @@
 
             function startJourney() {
                 Journey.startTime = new Date();
-                $('#startTime').html(Journey.startTime);
+                $('#startTime').text(Journey.startTime);
                 journeyInterval = setInterval(function(){
                     if(isPaused) return;
                         addJourneyPart();
@@ -127,19 +127,15 @@
                 // let diff = moment.duration(moment(endTime).diff(startTime));
                 // $('#timer').html([diff.hours(), diff.minutes(), diff.seconds(), diff.milliseconds()].join(':'));
 
-
                 // alternate
                 if(Journey.journeyParts.length > 0) {
-                    let startTime = Journey.journeyParts[Journey.journeyParts.length-1].dateTime;
+                   let tstartTime = Journey.journeyParts[Journey.journeyParts.length-1].dateTime;
                 } else {
-                    let startTime = Journey.startTime;
+                    let tstartTime = Journey.startTime;
                 }
-                let endTime = new Date();
-                console.log('startTime', startTime);
-                let timeBetween = (endTime - startTime) / 1000;
-                console.log('timeBetween', timeBetween);
+                let timeBetween = (new Date() - tstartTime) / 1000;
                 Journey.totalSeconds = Journey.totalSeconds + timeBetween;
-                $('#timer').html(moment("2015-01-01").startOf('day').seconds(Journey.totalSeconds).format('HH:mm:ss:SS'));
+                $('#timer').text(moment("2015-01-01").startOf('day').seconds(Journey.totalSeconds).format('HH:mm:ss:SS'));
             }
 
             function updateDistance() {
@@ -148,14 +144,14 @@
                 coords[coords.length-1][0], 
                 coords[coords.length-1][1]);
                 Journey.distance = distance;
-                $('#distance').html(Journey.distance);
+                $('#distance').text(Journey.distance);
             }
 
             function stopJourney() {
                 clearInterval(journeyInterval);
                 clearInterval(journeyInterval2);
                 Journey.endTime = new Date();
-                $('#endTime').html(Journey.endTime);
+                $('#endTime').text(Journey.endTime);
             }
 
             function pauseJourney() {

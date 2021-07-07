@@ -102,11 +102,20 @@
                     // update distance AFTER we get a part
                     updateDistance();
 
+                    checkLength();
+
                 }, function(err) { }, { enableHighAccuracy: true });
             }
 
             function recordJourneyPoint() {
                 
+            }
+
+            function checkLength() {
+                if(Journey.totalMilliseconds >= 172800000) { // 48 hrs
+                    stopJourney();
+                    alert('Journey exceeded 48 hrs.');
+                }
             }
 
             function startJourney() {

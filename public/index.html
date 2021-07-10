@@ -72,10 +72,6 @@
                 let journeyPart = {};
                 journeyPart.dateTime = new Date();
 
-                Journey.totalMilliseconds += 1;
-                $('#timer').text(moment().startOf('day')
-                .milliseconds(Journey.totalMilliseconds).format('HH:mm:ss:SS'));
-
                 navigator.geolocation.getCurrentPosition(function(position){
                     journeyPart.latitude = position.coords.latitude;
                     journeyPart.longitude = position.coords.longitude;
@@ -107,8 +103,15 @@
                 }, function(err) { }, { enableHighAccuracy: true });
             }
 
-            function recordJourneyPoint() {
-                
+            function updateTimer() {
+                let endTime = new Date();
+                let startTime = Journey.startTime;
+                let diff = moment.duration(moment(endTime).diff(startTime));
+                let text = moment().hours(diff.hours())
+                                   .minutes(diff.minutes())
+                                   .seconds(diff.seconds())
+                                   .milliseconds(diff.milliseconds()).format('HH:mm:ss:SS');
+                $('#timer').text(text);
             }
 
             function checkLength() {
@@ -124,6 +127,7 @@
                 journeyInterval = setInterval(function(){
                     if(isPaused) return;
                         addJourneyPart();
+                        updateTimer();
                 }, 1);
             }
 
@@ -138,7 +142,6 @@
 
             function stopJourney() {
                 clearInterval(journeyInterval);
-                clearInterval(journeyInterval2);
                 Journey.endTime = new Date();
                 $('#endTime').text(Journey.endTime);
             }

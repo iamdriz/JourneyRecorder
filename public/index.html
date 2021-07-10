@@ -16,7 +16,8 @@
             <button id="stop" style="display: none;">Stop</button>
         </div>
 
-        <p>Time: <span id="timer"></span></p>
+        <p>Time: <span id="timer"><span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>:<span id="milliseconds">00</span>
+                </span></p>
         <p>Start Time: <span id="startTime"></span></p>
         <p>End Time: <span id="endTime"></span></p>
         <p>Distance <span id="distance"></span> km</p>
@@ -61,7 +62,7 @@
             Journey.journeyParts = [];
 
             Journey.distance = 0;
-            Journey.totalMilliseconds = 0;
+            Journey.time = { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 };
 
             navigator.geolocation.getCurrentPosition(function(position){
                 
@@ -98,9 +99,59 @@
                     // update distance AFTER we get a part
                     updateDistance();
 
-                    checkLength();
-
                 }, function(err) { }, { enableHighAccuracy: true });
+            }
+
+            function updateTimer2() {
+
+                Journey.time.milliseconds++;
+
+                if (Journey.time.milliseconds < 9) {
+                    $('#milliseconds').text("0" + Journey.time.milliseconds);
+                }
+
+                if (Journey.time.milliseconds > 9) {
+                    $('#milliseconds').text(Journey.time.milliseconds);
+                }
+
+                if (Journey.time.milliseconds > 99) {
+                    Journey.time.seconds++;
+                    $('#seconds').text("0" + Journey.time.seconds);
+                    Journey.time.milliseconds = 0;
+                    $('#milliseconds').text("0" + 0);
+                }
+
+                if (Journey.time.seconds > 9) {
+                    $('#seconds').text(Journey.time.seconds);
+                }
+
+                if (Journey.time.seconds > 59) {
+                    Journey.time.minutes++;
+                    $('#minutes').text("0" + Journey.time.minutes);
+                    Journey.time.seconds = 0;
+                    $('#seconds').text("0" + 0);
+                    Journey.time.milliseconds = 0;
+                    $('#milliseconds').text("0" + 0);
+                }
+
+                if (Journey.time.minutes > 9) {
+                    $('#minutes').text(Journey.time.minutes);
+                }
+
+                if (Journey.time.minutes > 59) {
+                    Journey.time.hours++;
+                    $('#hours').text("0" + Journey.time.hours);
+                    Journey.time.minutes = 0;
+                    $('#minutes').text("0" + 0);
+                    Journey.time.seconds = 0;
+                    $('#seconds').text("0" + 0);
+                    Journey.time.milliseconds = 0;
+                    $('#milliseconds').text("0" + 0);
+                }
+
+                if (Journey.time.hours > 9) {
+                    $('#hours').text(Journey.time.hours);
+                }
             }
 
             function updateTimer() {
@@ -114,21 +165,14 @@
                 $('#timer').text(text);
             }
 
-            function checkLength() {
-                if(Journey.totalMilliseconds >= 172800000) { // 48 hrs
-                    stopJourney();
-                    alert('Journey exceeded 48 hrs.');
-                }
-            }
-
             function startJourney() {
                 Journey.startTime = new Date();
                 $('#startTime').text(Journey.startTime);
                 journeyInterval = setInterval(function(){
                     if(isPaused) return;
                         addJourneyPart();
-                        updateTimer();
-                }, 1);
+                        updateTimer2();
+                }, 10);
             }
 
             function updateDistance() {

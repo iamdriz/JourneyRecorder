@@ -195,12 +195,13 @@
 
             function startJourney() {
                 Journey.journeyParts.push({ startTime: new Date(), endTime: null, mapPoints: [] });
-                $('#startTime').text(Journey.journeyParts[0].startTime);
+                Journey.startTime = Journey.journeyParts[0].startTime;
+                $('#startTime').text(Journey.startTime);
                 journeyInterval = setInterval(function(){
                     if(isPaused) return;
                         addJourneyMapPoint();
                         updateTimer3();
-                }, 10);
+                }, 1);
             }
 
             function updateDistance() {
@@ -214,11 +215,12 @@
 
             function stopJourney() {
                 clearInterval(journeyInterval);
-                // endTime is already set by the pauseJourney function
+                // endTime for this part is already set by the pauseJourney function
                 if(!isPaused) {
                     Journey.journeyParts[Journey.journeyParts.length-1].endTime = new Date();
                 }
-                $('#endTime').text(Journey.journeyParts[Journey.journeyParts.length-1].endTime);
+                Journey.endTime = Journey.journeyParts[Journey.journeyParts.length-1].endTime
+                $('#endTime').text(Journey.endTime);
             }
 
             function pauseJourney() {

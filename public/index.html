@@ -16,15 +16,13 @@
             <button id="stop" style="display: none;">Stop</button>
         </div>
 
-        <p>Time: <span id="timer"><span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>:<span id="milliseconds">00</span>
+        <p>Time: <span id="timer"><span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>:<span id="milliseconds">000</span>
                 </span></p>
         <p>Start Time: <span id="startTime">---</span></p>
         <p>End Time: <span id="endTime">---</span></p>
         <p>Distance <span id="distance">0</span> miles</p>
 
         <div id="map" style="width:100%;height:320px;border:#000 2px solid;"></div>
-
-        <ul id="journeyParts"></ul>
 
         <script type="text/javascript">
 
@@ -68,33 +66,31 @@
                 
             }, function(err) { }, { enableHighAccuracy: true });
 
-            function addJourneyPart() {
+            function addJourneyMapPoint() {
 
-                let journeyPart = {};
-                journeyPart.dateTime = new Date();
+                let mapPoint = {};
+                mapPoint.dateTime = new Date();
 
                 navigator.geolocation.getCurrentPosition(function(position){
-                    journeyPart.latitude = position.coords.latitude;
-                    journeyPart.longitude = position.coords.longitude;
-                    journeyPart.accuracy = position.coords.accuracy;
-                    journeyPart.altitude = position.coords.altitude;
-                    journeyPart.altitudeAccuracy = position.coords.altitudeAccuracy;
-                    journeyPart.heading = position.coords.heading;
-                    journeyPart.speed = position.coords.speed;
-                    journeyPart.timestamp = position.timestamp;
-                    Journey.journeyParts.push(journeyPart);
+                    mapPoint.latitude = position.coords.latitude;
+                    mapPoint.longitude = position.coords.longitude;
+                    mapPoint.accuracy = position.coords.accuracy;
+                    mapPoint.altitude = position.coords.altitude;
+                    mapPoint.altitudeAccuracy = position.coords.altitudeAccuracy;
+                    mapPoint.heading = position.coords.heading;
+                    mapPoint.speed = position.coords.speed;
+                    mapPoint.timestamp = position.timestamp;
+                    Journey.journeyParts[Journey.journeyParts.length-1].mapPoints.push(mapPoint);
                     if(journeyLine) {
-                        journeyLine.addLatLng([journeyPart.latitude, journeyPart.longitude])
+                        journeyLine.addLatLng([mapPoint.latitude, mapPoint.longitude])
                     } else {
-                        journeyLine = L.polyline([[journeyPart.latitude, journeyPart.longitude]], {
+                        journeyLine = L.polyline([[mapPoint.latitude, mapPoint.longitude]], {
                             color: 'black',
                             opacity: 1,
                             weight: 4,
                         }).addTo(map);
                     }
-                    map.setView([journeyPart.latitude, journeyPart.longitude], 16);
-
-                    $('#journeyParts').append('<li>' + JSON.stringify(journeyPart) + '</li>');
+                    map.setView([mapPoint.latitude, mapPoint.longitude], 16);
 
                     // update distance AFTER we get a part
                     updateDistance();
@@ -154,24 +150,56 @@
                 }
             }
 
-            function updateTimer() {
-                let endTime = new Date();
-                let startTime = Journey.startTime;
-                let diff = moment.duration(moment(endTime).diff(startTime));
-                let text = moment().hours(diff.hours())
-                                   .minutes(diff.minutes())
-                                   .seconds(diff.seconds())
-                                   .milliseconds(diff.milliseconds()).format('HH:mm:ss:SS');
+            function leftPad(n) {
+                if(n < 10) return '0' + n;
+                return n;
+            }
+
+            function updateTimer3() {
+                let milliseconds = 0;
+                for(let i = 0; i < Journey.journeyParts.length; i++) {
+                    if(Journey.journeyParts[i].endTime) {
+                        milliseconds += moment.duration(moment(Journey.journeyParts[i].endTime).diff(Journey.journeyParts[i].startTime))._milliseconds;
+                    } else {
+                        milliseconds += moment.duration(moment(new Date()).diff(Journey.journeyParts[i].startTime))._milliseconds;
+                    }
+                }
+                let duration = moment.duration(milliseconds);
+                let text = ([leftPad(duration.hours()),
+                 leftPad(duration.minutes()),
+                  leftPad(duration.seconds()), 
+                  leftPad(duration.milliseconds())].join(':'));
                 $('#timer').text(text);
             }
 
+            // function updateTimer() {
+            //     let duration;
+            //     if(Journey.pauseTime) {
+            //         let newDate = moment(Journey.startTime).add(Journey.pauseTime - Journey.startTime, 'ms').toDate();
+            //         duration = moment.duration(moment(new Date()).diff(newDate));
+            //         // This kind of works except if you click the button too fast...
+            //         // possibly because there's not enough difference?
+            //     } else {
+            //         duration = moment.duration(moment(new Date()).diff(Journey.startTime));
+            //     }
+            //     // let text = moment().hours(duration.hours())
+            //     //                    .minutes(duration.minutes())
+            //     //                    .seconds(duration.seconds())
+            //     //                    .milliseconds(duration.milliseconds()).format('HH:mm:ss:SSS');
+            //     let text = ([leftPad(duration.hours()),
+            //      leftPad(duration.minutes()),
+            //       leftPad(duration.seconds()), 
+            //       leftPad(duration.milliseconds())].join(':'));
+            //     $('#timer').text(text);
+            // }
+
             function startJourney() {
-                Journey.startTime = new Date();
-                $('#startTime').text(Journey.startTime);
+                Journey.journeyParts.push({ startTime: new Date(), endTime: null, mapPoints: [] });
+                $('#startTime').text(Journey.journeyParts[0].startTime);
                 journeyInterval = setInterval(function(){
                     if(isPaused) return;
-                        addJourneyPart();
-                        updateTimer2();
+                        addJourneyMapPoint();
+                        updateTimer3();
                 }, 10);
             }
 
@@ -186,16 +214,21 @@
 
             function stopJourney() {
                 clearInterval(journeyInterval);
-                Journey.endTime = new Date();
-                $('#endTime').text(Journey.endTime);
+                // endTime is already set by the pauseJourney function
+                if(!isPaused) {
+                    Journey.journeyParts[Journey.journeyParts.length-1].endTime = new Date();
+                }
+                $('#endTime').text(Journey.journeyParts[Journey.journeyParts.length-1].endTime);
             }
 
             function pauseJourney() {
                 isPaused = true;
+                Journey.journeyParts[Journey.journeyParts.length-1].endTime = new Date();
             }
 
             function resumeJourney() {
                 isPaused = false;
+                Journey.journeyParts.push({ startTime: new Date(), endTime: null, mapPoints: [] });
             }
 
             $(document).on('click', '#start', function(e) {
